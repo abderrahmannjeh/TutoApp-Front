@@ -1,24 +1,15 @@
-import { NgIf } from '@angular/common';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
-import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
+import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 
 @Component({
     selector     : 'auth-sign-up',
     templateUrl  : './sign-up.component.html',
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations,
-    standalone   : true,
-    imports      : [RouterLink, NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatProgressSpinnerModule],
+    animations   : fuseAnimations
 })
 export class AuthSignUpComponent implements OnInit
 {

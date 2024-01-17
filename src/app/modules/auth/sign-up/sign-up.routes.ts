@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
+import { Route, Routes } from '@angular/router';
 import { AuthSignUpComponent } from 'app/modules/auth/sign-up/sign-up.component';
 
-export default [
+export const routers : Route[]= [
     {
         path     : '',
         component: AuthSignUpComponent,
     },
-] as Routes;
+]
