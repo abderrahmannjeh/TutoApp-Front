@@ -109,7 +109,6 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy
 
         if ( navigation )
         {
-            // Toggle the opened status
             navigation.toggle();
         }
     }
