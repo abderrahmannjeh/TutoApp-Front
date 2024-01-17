@@ -53,26 +53,16 @@ export class FuseLoadingBarComponent implements OnChanges, OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        // Subscribe to the service
         this._fuseLoadingService.mode$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((value) =>
-            {
+            .subscribe((value) => {
                 this.mode = value;
             });
 
         this._fuseLoadingService.progress$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((value) =>
-            {
+            .subscribe((value) => {
                 this.progress = value;
-            });
-
-        this._fuseLoadingService.show$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((value) =>
-            {
-                this.show = value;
             });
 
     }

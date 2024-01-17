@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
+import {Route, Routes} from '@angular/router';
 import { AuthForgotPasswordComponent } from 'app/modules/auth/forgot-password/forgot-password.component';
 
-export default [
+export const routes: Route[]=  [
     {
         path     : '',
         component: AuthForgotPasswordComponent,
-    },
-] as Routes;
+    }
+]

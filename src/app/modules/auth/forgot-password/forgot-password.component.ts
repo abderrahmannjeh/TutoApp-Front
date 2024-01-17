@@ -15,9 +15,7 @@ import { finalize } from 'rxjs';
     selector     : 'auth-forgot-password',
     templateUrl  : './forgot-password.component.html',
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations,
-    standalone   : true,
-    imports      : [NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatProgressSpinnerModule, RouterLink],
+    animations   : fuseAnimations
 })
 export class AuthForgotPasswordComponent implements OnInit
 {
