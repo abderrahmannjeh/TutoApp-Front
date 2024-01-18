@@ -1,9 +1,13 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+    FormBuilder,
+    UntypedFormGroup,
+    Validators
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
-import { AuthService } from 'app/core/auth/auth.service';
+import {AuthService, UserDTO} from "../../../../../swagger-api";
 
 @Component({
     selector     : 'auth-sign-up',
@@ -13,7 +17,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 })
 export class AuthSignUpComponent implements OnInit
 {
-    @ViewChild('signUpNgForm') signUpNgForm: NgForm;
+    @ViewChild('signUpNgForm') signUpNgForm: UntypedFormGroup;
 
     alert: { type: FuseAlertType; message: string } = {
         type   : 'success',
@@ -21,14 +25,16 @@ export class AuthSignUpComponent implements OnInit
     };
     signUpForm: UntypedFormGroup;
     showAlert: boolean = false;
+    private user: UserDTO
 
     /**
      * Constructor
      */
     constructor(
         private _authService: AuthService,
-        private _formBuilder: UntypedFormBuilder,
+        private _formBuilder: FormBuilder,
         private _router: Router,
+        private dc: ChangeDetectorRef
     )
     {
     }
@@ -44,61 +50,56 @@ export class AuthSignUpComponent implements OnInit
     {
         // Create the form
         this.signUpForm = this._formBuilder.group({
-                name      : ['', Validators.required],
+                firstName      : this._formBuilder.control('', Validators.required),
+                lastName      : ['', Validators.required],
                 email     : ['', [Validators.required, Validators.email]],
                 password  : ['', Validators.required],
-                company   : [''],
-                agreements: ['', Validators.requiredTrue],
+                isStore   : [false]
             },
         );
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Sign up
-     */
+    get firstName(){
+        return this.signUpForm?.get('firstName');
+    }    get lastName(){
+        return this.signUpForm?.get('lastName');
+    }    get email(){
+        return this.signUpForm?.get('email');
+    }    get password(){
+        return this.signUpForm?.get('password');
+    }    get isStore(){
+        return this.signUpForm?.get('isStore');
+    }
     signUp(): void
     {
-        // Do nothing if the form is invalid
-        if ( this.signUpForm.invalid )
-        {
-            return;
-        }
-
-        // Disable the form
-        this.signUpForm.disable();
-
-        // Hide the alert
         this.showAlert = false;
+        var user = this.signUpForm.value as UserDTO
+        this._authService.apiAuthRegisterPost(user).subscribe(res=>{
+            if(res.hasError){
+                this.alert ={
+                    type:'error',
+                    message: res.error
+                }
+                this.showAlert = true;
+            }
+            else {
+                localStorage.setItem('accessToken',res.token);
+                localStorage.setItem('user',JSON.stringify(res));
+                this._router.navigateByUrl('/example');
+            }
+        })
 
-        // Sign up
-        this._authService.signUp(this.signUpForm.value)
-            .subscribe(
-                (response) =>
-                {
-                    // Navigate to the confirmation required page
-                    this._router.navigateByUrl('/confirmation-required');
-                },
-                (response) =>
-                {
-                    // Re-enable the form
-                    this.signUpForm.enable();
+    }
 
-                    // Reset the form
-                    this.signUpNgForm.resetForm();
+    changeStore() {
+        console.log(this.isStore.value)
+        if(this.isStore.value == true){
+            this.lastName.clearValidators();
+            this.lastName.setValue(null)
+        }
+        else {
+            this.lastName.addValidators(Validators.required)
+        }
+        this.dc.detectChanges();
 
-                    // Set the alert
-                    this.alert = {
-                        type   : 'error',
-                        message: 'Something went wrong, please try again.',
-                    };
-
-                    // Show the alert
-                    this.showAlert = true;
-                },
-            );
     }
 }

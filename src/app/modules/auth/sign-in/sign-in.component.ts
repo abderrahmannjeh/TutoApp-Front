@@ -4,7 +4,7 @@ import { FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFo
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import {  FuseAlertType } from '@fuse/components/alert';
-import { AuthService } from 'app/core/auth/auth.service';
+import {AuthService, UserDTO} from "../../../../../swagger-api";
 
 @Component({
     selector     : 'auth-sign-in',
@@ -61,50 +61,23 @@ export class AuthSignInComponent implements OnInit
      */
     signIn(): void
     {
-        // Return if the form is invalid
-        if ( this.signInForm.invalid )
-        {
-            return;
-        }
+        var user = this.signInForm.value  as UserDTO;
+        this._authService.apiAuthLoginPost(user).subscribe(res=>{
 
-        // Disable the form
-        this.signInForm.disable();
+            if(res.hasError){
+                this.alert ={
+                    type:'error',
+                    message: res.error
+                }
+                this.showAlert = true;
+            }
+            else {
+                localStorage.setItem('accessToken',res.token);
+                localStorage.setItem('user',JSON.stringify(res));
+                this._router.navigateByUrl('/example');
+            }
 
-        // Hide the alert
-        this.showAlert = false;
+        })
 
-        // Sign in
-        this._authService.signIn(this.signInForm.value)
-            .subscribe(
-                () =>
-                {
-                    // Set the redirect url.
-                    // The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
-                    // to the correct page after a successful sign in. This way, that url can be set via
-                    // routing file and we don't have to touch here.
-                    const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-
-                    // Navigate to the redirect url
-                    this._router.navigateByUrl(redirectURL);
-
-                },
-                (response) =>
-                {
-                    // Re-enable the form
-                    this.signInForm.enable();
-
-                    // Reset the form
-                    this.signInNgForm.resetForm();
-
-                    // Set the alert
-                    this.alert = {
-                        type   : 'error',
-                        message: 'Wrong email or password',
-                    };
-
-                    // Show the alert
-                    this.showAlert = true;
-                },
-            );
     }
 }

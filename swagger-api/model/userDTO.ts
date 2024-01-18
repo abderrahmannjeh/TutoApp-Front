@@ -16,6 +16,7 @@ export interface UserDTO {
     password?: string | null;
     firstName?: string | null;
     lastName?: string | null;
-    isStore?: boolean;
+    isStore?: boolean | null;
+    avatar?: string | null;
 }
 

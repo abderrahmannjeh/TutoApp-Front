@@ -23,10 +23,11 @@
                 [appearance]="'outline'"
                 [showIcon]="false"
                 [type]="alert.type"
-                [@shake]="alert.type === 'error'">
-                {{alert.message}}
-            </fuse-alert>
+                [@shake]="alert.type === 'error'"
 
+            >
+            <div innerHTML="{{alert.message}}"></div>
+            </fuse-alert>
             <!-- Sign Up form -->
             <form
                 class="mt-8"
@@ -34,16 +35,41 @@
                 #signUpNgForm="ngForm">
 
                 <!-- Name field -->
-                <mat-form-field class="w-full">
-                    <mat-label>Full name</mat-label>
-                    <input
-                        id="name"
-                        matInput
-                        [formControlName]="'name'">
-                    <mat-error *ngIf="signUpForm.get('name').hasError('required')">
-                        Full name is required
-                    </mat-error>
-                </mat-form-field>
+                <div *ngIf="isStore.value == false">
+                    <mat-form-field class="w-full">
+                        <mat-label>First name</mat-label>
+                        <input
+                            id="name"
+                            matInput
+                            [formControlName]="'firstName'">
+                        <mat-error *ngIf="firstName?.hasError('required')">
+                            First name is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="w-full">
+                        <mat-label>lastName</mat-label>
+                        <input
+                            id="lastName"
+                            matInput
+                            [formControlName]="'lastName'">
+                        <mat-error *ngIf="lastName?.hasError('required')">
+                            First name is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div *ngIf="isStore.value == true">
+                    <mat-form-field class="w-full">
+                        <mat-label>Store Name</mat-label>
+                        <input
+                            id="Storename"
+                            matInput
+                            [formControlName]="'firstName'">
+                        <mat-error *ngIf="firstName?.hasError('required')">
+                            First name is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
 
                 <!-- Email field -->
                 <mat-form-field class="w-full">
@@ -52,10 +78,10 @@
                         id="email"
                         matInput
                         [formControlName]="'email'">
-                    <mat-error *ngIf="signUpForm.get('email').hasError('required')">
+                    <mat-error *ngIf="email?.hasError('required')">
                         Email address is required
                     </mat-error>
-                    <mat-error *ngIf="signUpForm.get('email').hasError('email')">
+                    <mat-error *ngIf="email?.hasError('email')">
                         Please enter a valid email address
                     </mat-error>
                 </mat-form-field>
@@ -87,33 +113,15 @@
                         Password is required
                     </mat-error>
                 </mat-form-field>
-
-                <!-- Company field -->
-                <mat-form-field class="w-full">
-                    <mat-label>Company</mat-label>
-                    <input
-                        id="company-confirm"
+                <div class="flex flex-col mt-8">
+                    <span class="font-semibold mb-2">Store Account ?</span>
+                    <mat-slide-toggle
+                        (change)="changeStore()"
+                        [formControlName]="'isStore'"
+                        [color]="'primary'">
+                        {{isStore.value === true ? 'Active' : 'Disabled'}}
                         matInput
-                        [formControlName]="'company'">
-                </mat-form-field>
-
-                <!-- ToS and PP -->
-                <div class="inline-flex items-end w-full mt-1.5">
-                    <mat-checkbox
-                        class="-ml-2"
-                        [color]="'primary'"
-                        [formControlName]="'agreements'">
-                        <span>I agree with</span>
-                        <a
-                            class="ml-1 text-primary-500 hover:underline"
-                            [routerLink]="['./']">Terms
-                        </a>
-                        <span>and</span>
-                        <a
-                            class="ml-1 text-primary-500 hover:underline"
-                            [routerLink]="['./']">Privacy Policy
-                        </a>
-                    </mat-checkbox>
+                    </mat-slide-toggle>
                 </div>
 
                 <!-- Submit button -->
@@ -121,9 +129,9 @@
                     class="fuse-mat-button-large w-full mt-6"
                     mat-flat-button
                     [color]="'primary'"
-                    [disabled]="signUpForm.disabled"
+                    [disabled]="signUpForm.invalid"
                     (click)="signUp()">
-                    <span *ngIf="!signUpForm.disabled">
+                    <span *ngIf="!signUpForm?.disabled">
                         Create your free account
                     </span>
                     <mat-progress-spinner

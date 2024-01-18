@@ -11,6 +11,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { AuthSignUpComponent } from './sign-up.component';
 import { routers } from './sign-up.routes';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { routers } from './sign-up.routes';
         MatButtonModule,
         MatIconModule,
         MatCheckboxModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatSlideToggleModule
     ],
     providers: [provideRouter(routers)]
 })
