@@ -164,24 +164,23 @@ export class AuthService
     check(): Observable<boolean>
     {
         // Check if the user is logged in
-        if ( this._authenticated )
-        {
+        // Check if the user is logged in
+        if (this._authenticated) {
             return of(true);
         }
 
         // Check the access token availability
-        if ( !this.accessToken )
-        {
+        if (!this.accessToken) {
             return of(false);
         }
 
         // Check the access token expire date
-        if ( AuthUtils.isTokenExpired(this.accessToken) )
+        /*if ( AuthUtils.isTokenExpired(this.accessToken) )
         {
             return of(false);
-        }
+        }*/
 
         // If the access token exists, and it didn't expire, sign in using it
-        return this.signInUsingToken();
+        return of(true)
     }
 }
