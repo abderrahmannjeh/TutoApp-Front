@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import {AsyncPipe, NgIf} from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,14 +16,14 @@ import { QuickChatComponent } from 'app/layout/common/quick-chat/quick-chat.comp
 import { SearchComponent } from 'app/layout/common/search/search.component';
 import { ShortcutsComponent } from 'app/layout/common/shortcuts/shortcuts.component';
 import { UserComponent } from 'app/layout/common/user/user.component';
-import { Subject, takeUntil } from 'rxjs';
+import {of, Subject, takeUntil} from 'rxjs';
 
 @Component({
     selector     : 'classic-layout',
     templateUrl  : './classic.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone   : true,
-    imports      : [FuseLoadingBarComponent, FuseVerticalNavigationComponent, MatButtonModule, MatIconModule, LanguagesComponent, FuseFullscreenComponent, SearchComponent, ShortcutsComponent, MessagesComponent, NotificationsComponent, UserComponent, NgIf, RouterOutlet, QuickChatComponent],
+    imports: [FuseLoadingBarComponent, FuseVerticalNavigationComponent, MatButtonModule, MatIconModule, LanguagesComponent, FuseFullscreenComponent, SearchComponent, ShortcutsComponent, MessagesComponent, NotificationsComponent, UserComponent, NgIf, RouterOutlet, QuickChatComponent, AsyncPipe],
 })
 export class ClassicLayoutComponent implements OnInit, OnDestroy
 {
@@ -111,5 +111,14 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy
         {
             navigation.toggle();
         }
+    }
+    isLogIn(){
+
+       var token = localStorage.getItem('accessToken');
+       if(token != undefined ){
+           return of(true)
+       }
+       else
+           return of(false);
     }
 }

@@ -91,5 +91,17 @@ export const appRoutes: Route[] = [
         children: [
             {path: 'example', loadChildren: () => import('app/modules/admin/example/example.routes')},
         ]
+    },
+    {
+        path: 'shopProd',
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        component: LayoutComponent,
+        resolve: {
+            initialData: initialDataResolver
+        },
+        children: [
+            {path: '', loadChildren: () => import('app/modules/store-product/store-product.module').then(m=>m.StoreProductModule)},
+        ]
     }
 ];
