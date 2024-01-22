@@ -4,11 +4,13 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { AuthService } from './api/auth.service';
+import { BrandService } from './api/brand.service';
 import { CategoryService } from './api/category.service';
 import { ClientService } from './api/client.service';
 import { CommandeService } from './api/commande.service';
 import { LigneCommandeService } from './api/ligneCommande.service';
 import { ProductService } from './api/product.service';
+import { TagService } from './api/tag.service';
 
 @NgModule({
   imports:      [],

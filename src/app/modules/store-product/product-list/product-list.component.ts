@@ -17,7 +17,7 @@ import {
 export class ProductListComponent implements OnInit{
 
      products: ProductDTO[]=[];
-
+     selectedProduct:ProductDTO;
     isLoading:boolean = true;
     constructor(private  productService: ProductService
 
@@ -30,5 +30,26 @@ export class ProductListComponent implements OnInit{
             this.products = result;
             this.isLoading =false;
         })
+    }
+
+
+    toggleDetails(product: ProductDTO): void
+    {
+        console.log(product);
+        
+        // If the product is already selected...
+        if ( this.selectedProduct && this.selectedProduct.id === product?.id )
+        {
+            // Close the details
+            this.closeDetails();
+            return;
+        }
+        this.selectedProduct = product;
+        console.log(this.selectedProduct);
+        
+    }
+    closeDetails(): void
+    {
+        this.selectedProduct = null;
     }
 }

@@ -10,6 +10,9 @@
  * Do not edit the class manually.
  */
 import { CategoryDTO } from './categoryDTO';
+import { UserDTO } from './userDTO';
+import { TagDTO } from './tagDTO';
+import { BrandDTO } from './brandDTO';
 
 
 export interface ProductDTO { 
@@ -21,6 +24,19 @@ export interface ProductDTO {
     picture?: string | null;
     price?: number;
     categoryID?: number | null;
+    brandID?: number | null;
+    userID?: string | null;
+    weight?: number | null;
+    cost?: number | null;
+    sku?: string | null;
+    basePrice?: number | null;
+    tax?: number | null;
+    stock?: number;
+    reserved?: number;
+    isActive?: boolean | null;
+    brand?: BrandDTO;
+    tags?: Array<TagDTO> | null;
+    user?: UserDTO;
     category?: CategoryDTO;
 }
 

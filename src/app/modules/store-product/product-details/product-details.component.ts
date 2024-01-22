@@ -44,19 +44,20 @@ export class ProductDetailsComponent implements OnInit{
         this.getAllBrand();
         if(this.isEdit){
             this.getProductWithDetails();
+            this.patchForm()
         }
     }
 
     builForm(){
         this.selectedProductForm = this._formBuilder.group({
             id               : [''],
-            category         : [''],
+            categoryID         : [''],
             name             : ['', [Validators.required]],
             description      : [''],
             tags             : [[]],
             sku              : [''],
             barcode          : [''],
-            brand            : [''],
+            brandID          : [''],
             vendor           : [''],
             stock            : [''],
             reserved         : [''],
@@ -72,17 +73,20 @@ export class ProductDetailsComponent implements OnInit{
         });
     }
     getProductWithDetails(){
-        this.productService.apiProductGetProductWithDetailsGet(this.productId).subscribe(result=>{
+        this.productService.apiProductGetProductWithDetailsIdGet(this.productId).subscribe(result=>{
             this.product = result;
             this.patchForm();
         })
     }
     patchForm(){
+        console.log(this.product);
+        
         this.selectedProductForm.patchValue(this.product);
     }
     getAllTags(){
         this.tagService.apiTagGet().subscribe(resullt=>{
             this.tags = resullt;
+            this.filteredTags = resullt;
         })
     }
     getAllBrand(){
@@ -95,8 +99,13 @@ export class ProductDetailsComponent implements OnInit{
             this.categories = result;
         })
     }
-    filterTags($event: Event) {
+    filterTags(event): void
+    {
+        // Get the value
+        const value = event.target.value.toLowerCase();
 
+        // Filter the tags
+        this.filteredTags = this.tags.filter(tag => tag.name.toLowerCase().includes(value));
     }
 
     filterTagsInputKeyDown($event: KeyboardEvent) {
@@ -138,4 +147,11 @@ export class ProductDetailsComponent implements OnInit{
     updateSelectedProduct() {
 
     }
+    triggerFileInput(): void {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput) {
+          fileInput.click();
+        }
+      }
+    
 }

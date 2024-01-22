@@ -1,5 +1,7 @@
 export * from './auth.service';
 import { AuthService } from './auth.service';
+export * from './brand.service';
+import { BrandService } from './brand.service';
 export * from './category.service';
 import { CategoryService } from './category.service';
 export * from './client.service';
@@ -10,4 +12,6 @@ export * from './ligneCommande.service';
 import { LigneCommandeService } from './ligneCommande.service';
 export * from './product.service';
 import { ProductService } from './product.service';
-export const APIS = [AuthService, CategoryService, ClientService, CommandeService, LigneCommandeService, ProductService];
+export * from './tag.service';
+import { TagService } from './tag.service';
+export const APIS = [AuthService, BrandService, CategoryService, ClientService, CommandeService, LigneCommandeService, ProductService, TagService];
