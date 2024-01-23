@@ -9,21 +9,21 @@
                     <!-- Product images and status -->
                     <div class="flex flex-col items-center sm:items-start mb-8 sm:mb-0">
                         <div class="flex flex-col items-center">
-                            <div class="w-32 h-44 border rounded overflow-hidden">
+                            <div class="w-50 h-50 border rounded overflow-hidden">
                                 <ng-container *ngIf="product?.picture; else noImage" >
                                     <div (click)="triggerFileInput()">
                                         <img
                                         class="w-full h-full object-cover"
                                         [src]="this.product.picture">
-                                        <input type="file" id="fileInput"[hidden]="true" (change)="handleFileInput($any($event.target).files)" />
+                                        <input type="file" id="fileInput"  [hidden]="true" (change)="handleFileInput($any($event.target).files)" />
                                     </div>
 
 
                                     </ng-container>
                                 <ng-template #noImage>
-                                    <div class="custom-file-input">
-                                        <label for="fileInput">Choose File</label>
-                                        <input type="file" id="fileInput"  />
+                                    <div class="custom-file-input" (click)="triggerFileInput()">
+                                        <label >Choose File</label>
+                                        <input type="file" id="fileInput" [hidden]="true" (change)="handleFileInput($any($event.target).files)"   />
                                       </div>                                </ng-template>
                             </div>
                             <div

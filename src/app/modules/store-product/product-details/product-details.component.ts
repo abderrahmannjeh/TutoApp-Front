@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
     BrandDTO,
@@ -13,6 +13,7 @@ import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {HttpClient, HttpEventType, HttpRequest} from "@angular/common/http";
 import {environment} from "../../../../environments/envirment";
+import {result} from "lodash-es";
 
 @Component({
   selector: 'app-product-details',
@@ -37,6 +38,9 @@ export class ProductDetailsComponent implements OnInit{
     uploadFileLabel: string | undefined = 'Choose an image to upload';
     uploadProgress: number;
     uploadUrl: string;
+    private imageUrl: any;
+
+    @Output() endUpdate : EventEmitter<any> = new EventEmitter<any>();
     constructor( private _formBuilder: UntypedFormBuilder,  private _changeDetectorRef: ChangeDetectorRef,
                  private  brandService: BrandService
                 ,private  categoryService: CategoryService,
@@ -88,8 +92,6 @@ export class ProductDetailsComponent implements OnInit{
         })
     }
     patchForm(){
-        console.log(this.product);
-
         this.selectedProductForm.patchValue(this.product);
     }
     getAllTags(){
@@ -154,6 +156,13 @@ export class ProductDetailsComponent implements OnInit{
     }
 
     updateSelectedProduct() {
+        const product = this.selectedProductForm.value as ProductDTO
+        product.id = this.productId;
+        product.picture = this.product.picture;
+        console.log(product)
+        this.productService.apiProductPut(this.productId,product).subscribe(result=>{
+            this.endUpdate.emit();
+        })
 
     }
     triggerFileInput(): void {
@@ -189,7 +198,10 @@ export class ProductDetailsComponent implements OnInit{
         this.working = true;
 
         this.http.request(uploadReq).subscribe((event: any) => {
-            this.product.picture = event?.body?.url;
+            console.log(event)
+            this.imageUrl = event?.body?.url;
+            console.log(this.imageUrl)
+            this.product.picture = this.imageUrl;
 
         }, (error: any) => {
             console.error(error);

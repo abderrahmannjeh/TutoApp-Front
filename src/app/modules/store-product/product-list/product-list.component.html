@@ -156,7 +156,7 @@
                                             mat-stroked-button
                                             (click)="toggleDetails(product)"
                                             >
-                                           
+
                                             <mat-icon
                                                 class="icon-size-5"
                                                 [svgIcon]="selectedProduct?.id === product.id ? 'heroicons_solid:chevron-up' : 'heroicons_solid:chevron-down'"></mat-icon>
@@ -185,7 +185,7 @@
 <ng-template
                 #rowDetailsTemplate
                 let-product
-                
+
                 >
-<app-product-details [productId]="selectedProduct?.id" [isEdit]="true" ></app-product-details>
+<app-product-details [productId]="selectedProduct?.id" (endUpdate)="loadProducts()" [isEdit]="true" ></app-product-details>
 </ng-template>

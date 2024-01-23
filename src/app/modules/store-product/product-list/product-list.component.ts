@@ -26,17 +26,20 @@ export class ProductListComponent implements OnInit{
     }
 
     ngOnInit(): void {
-        this.productService.apiProductGet().subscribe(result=>{
-            this.products = result;
-            this.isLoading =false;
-        })
+        this.loadProducts();
     }
 
 
+    loadProducts(){
+        this.productService.apiProductGet().subscribe(result=>{
+            this.products = result;
+            this.isLoading =false;
+            this.closeDetails();
+        });
+    }
     toggleDetails(product: ProductDTO): void
     {
-        console.log(product);
-        
+
         // If the product is already selected...
         if ( this.selectedProduct && this.selectedProduct.id === product?.id )
         {
@@ -46,7 +49,7 @@ export class ProductListComponent implements OnInit{
         }
         this.selectedProduct = product;
         console.log(this.selectedProduct);
-        
+
     }
     closeDetails(): void
     {
