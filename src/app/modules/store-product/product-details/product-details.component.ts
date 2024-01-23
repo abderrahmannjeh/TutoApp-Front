@@ -4,13 +4,15 @@ import {
     BrandDTO,
     BrandService,
     CategoryDTO,
-    CategoryService,
+    CategoryService, FileUploadService,
     ProductDTO, ProductService,
     TagDTO,
     TagService
 } from "../../../../../swagger-api";
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {MatCheckboxChange} from "@angular/material/checkbox";
+import {HttpClient, HttpEventType, HttpRequest} from "@angular/common/http";
+import {environment} from "../../../../environments/envirment";
 
 @Component({
   selector: 'app-product-details',
@@ -29,12 +31,19 @@ export class ProductDetailsComponent implements OnInit{
     filteredTags : TagDTO[] =[];
     tagsEditMode: boolean = false;
     flashMessage: any;
-
+    selectedFile: File;
+    working = false;
+    uploadFile: File | null;
+    uploadFileLabel: string | undefined = 'Choose an image to upload';
+    uploadProgress: number;
+    uploadUrl: string;
     constructor( private _formBuilder: UntypedFormBuilder,  private _changeDetectorRef: ChangeDetectorRef,
                  private  brandService: BrandService
                 ,private  categoryService: CategoryService,
                  private tagService: TagService,
-                 private productService: ProductService
+                 private productService: ProductService,
+                 private fileService:FileUploadService,
+                 private http: HttpClient
                 ) {}
 
     ngOnInit(): void {
@@ -80,7 +89,7 @@ export class ProductDetailsComponent implements OnInit{
     }
     patchForm(){
         console.log(this.product);
-        
+
         this.selectedProductForm.patchValue(this.product);
     }
     getAllTags(){
@@ -153,5 +162,43 @@ export class ProductDetailsComponent implements OnInit{
           fileInput.click();
         }
       }
-    
+    handleFileInput(files: FileList) {
+        if (files.length > 0) {
+            this.uploadFile = files.item(0);
+            this.uploadFileLabel = this.uploadFile?.name;
+            this.upload();
+        }
+    }
+
+    upload() {
+        if (!this.uploadFile) {
+            alert('Choose a file to upload first');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append(this.uploadFile.name, this.uploadFile);
+
+        const url = `${environment.roleManagementApiUrl}/api/FileUpload`;
+        const uploadReq = new HttpRequest('POST', url, formData, {
+            reportProgress: true,
+        });
+
+        this.uploadUrl = '';
+        this.uploadProgress = 0;
+        this.working = true;
+
+        this.http.request(uploadReq).subscribe((event: any) => {
+            this.product.picture = event?.body?.url;
+
+        }, (error: any) => {
+            console.error(error);
+        }).add(() => {
+            this.working = false;
+        });
+    }
+
+
 }
+
+

@@ -14,10 +14,10 @@
                                     <div (click)="triggerFileInput()">
                                         <img
                                         class="w-full h-full object-cover"
-                                        [src]="selectedProductForm.get('images').value[selectedProductForm.get('currentImageIndex').value]">
-                                        <input type="file" id="fileInput"[hidden]="true" />
+                                        [src]="this.product.picture">
+                                        <input type="file" id="fileInput"[hidden]="true" (change)="handleFileInput($any($event.target).files)" />
                                     </div>
-                                    
+
 
                                     </ng-container>
                                 <ng-template #noImage>
